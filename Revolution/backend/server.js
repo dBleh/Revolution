@@ -4,17 +4,30 @@ const dotenv = require('dotenv').config();
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 const port = process.env.PORT || 5000;
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    console.log(file.fieldname)
+  }
+});
+
+const upload = multer({ storage: storage });
 connectDB();
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/companyInformation', require('./routes/companyInformationRoute'));
+
 
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {

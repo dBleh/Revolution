@@ -3,12 +3,77 @@ const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 const Client = require('../models/clientModel')
+const PDF = require('../models/pdfModel')
+const Policy = require('../models/policyModel')
+
+
+const getPolicies = asyncHandler(async (req, res) => {
+  
+  const policies = await Policy.find({ "repId": req.body._id })
+ 
+   res.status(200).json(policies)
+});
+
+const addPolicy = asyncHandler(async (req, res) => {
+
+  const { repId, clientId, primaryActivity, quoteDate, validUntil, policyPeriod, revenue, employees, capacity, policyCost } = req.body
+  if (!primaryActivity || !quoteDate || !validUntil || !policyPeriod || !revenue || !employees || !capacity || !policyCost) {
+    res.status(400)
+    throw new Error('Please add all fields')
+  }
+  const policy = new Policy({
+    repId: repId,
+    clientId: clientId,
+    primaryActivity: primaryActivity,
+    quoteDate: quoteDate,
+    validUntil: validUntil,
+    policyPeriod: policyPeriod,
+    revenue: revenue,
+    employees: employees,
+    capacity: capacity,
+    policyCost: policyCost,
+  })
+  policy.save((error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Policy saved successfully');
+    }
+  });
+  
+})
+
+
+const addPdf = asyncHandler(async (req, res) => {
+  const { buffer } = req.file
+
+  const pdf = new PDF({
+    repId: req.body.repId,
+    clientId: req.body.clientId,
+    fileName: req.body.filename,
+    data: buffer,
+    clientName: req.body.name
+  })
+
+  pdf.save((error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('PDF saved successfully');
+    }
+  });
+});
+
+const getPdfs = asyncHandler(async (req, res) => {
+  const pdfs = await PDF.find({ "repId": req.body[0], "clientId": req.body[1]})
+  res.status(200).json(pdfs)
+});
 
 // @desc    Register new user
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, userType, primaryBroker } = req.body
+  const { name, email, password, userType } = req.body
   if (!name || !email || !password || !userType) {
     res.status(400)
     throw new Error('Please add all fields')
@@ -22,34 +87,36 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists')
   }
 
+
   // Hash password
   const salt = await bcrypt.genSalt(10)
   const hashedPassword = await bcrypt.hash(password, salt)
   // Create user
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      userType,
-    })
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    userType,
+  })
 
-    if (user) {
-      res.status(201).json({
-        _id: user.id,
-        name: user.name,
-        email: user.email,
-        userType: user.userType,
-        token: generateToken(user._id),
-      })
-    } else {
-      res.status(400)
-      throw new Error('Invalid user data')
-    }
-  
+  if (user) {
+    res.status(201).json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      userType: user.userType,
+      token: generateToken(user._id),
+    })
+  } else {
+    res.status(400)
+    throw new Error('Invalid user data')
+  }
+
 })
+
 const registerClient = asyncHandler(async (req, res) => {
-  const { name, email, password, userType, primaryBroker } = req.body
-  if (!name || !email || !password || !userType || !primaryBroker) {
+  const { name, email, password, userType, brokerId } = req.body
+  if (!name || !email || !password || !userType || !brokerId) {
     res.status(400)
     throw new Error('Please add all fields')
   }
@@ -64,27 +131,26 @@ const registerClient = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt)
   {
     const user = await Client.create({
-    name,
-    email,
-    password: hashedPassword,
-    userType,
-    primaryBroker,
-  })
-  if (user) {
-    res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-      userType: user.userType,
-      primaryBroker: user.primaryBroker,
+      name,
+      email,
+      password: hashedPassword,
+      userType,
+      brokerId,
     })
-  } else {
-    res.status(400)
-    throw new Error('Invalid user data')
+    if (user) {
+      res.status(201).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        userType: user.userType,
+        brokerId: user._id,
+      })
+    } else {
+      res.status(400)
+      throw new Error('Invalid user data')
+    }
   }
-}
 })
-
 
 // @desc    Authenticate a user
 // @route   POST /api/users/login
@@ -125,11 +191,15 @@ const loginUser = asyncHandler(async (req, res) => {
     }
   }
 })
+
 // get all clients
 const getClients = asyncHandler(async (req, res) => {
-  const user = await Client.find({}, { name: 1, email: 1, userType: 1, primaryBroker: 1 })
+  const user = await Client.find({"brokerId": req.body._id}, { name: 1, email: 1, userType: 1, primaryBroker: 1, _id: 1 })
   res.status(200).json(user)
 
+})
+const changeClient = asyncHandler(async (req, res) => {
+  res.status(200).json(req.body)
 })
 
 // @desc    Get user data
@@ -147,8 +217,13 @@ const generateToken = (id) => {
 }
 
 module.exports = {
+  getPolicies,
+  addPolicy,
+  getPdfs,
+  addPdf,
   registerUser,
   registerClient,
+  changeClient,
   loginUser,
   getClients,
   getMe,

@@ -7,7 +7,6 @@ import HomePage from './pages/HomePage'
 //Client imports
 import ClientDashboard from './pages/ClientPages/ClientDashboard'
 import ClientLogin from './pages/ClientPages/ClientLogin'
-import ClientRegister from './pages/ClientPages/ClientRegister'
 import Renewal from './pages/ClientPages/Renewal'
 import Policies from './pages/ClientPages/Policies'
 import Submissions from './pages/ClientPages/Submissions'
@@ -28,7 +27,7 @@ import RepHistory from './pages/RepresentativePages/RepHistory'
 import RepLogin from './pages/RepresentativePages/RepLogin'
 import RepStatus from './pages/RepresentativePages/RepStatus'
 import RepSubmissions from './pages/RepresentativePages/RepSubmissions'
-import RiskManagement from './pages/RepresentativePages/RiskManagement'
+import RiskManagement from './pages/RepresentativePages/RepRiskManagement'
 import RepRegister from './pages/RepresentativePages/RepRegister'
 import RegisterClient from './pages/RepresentativePages/RegisterClient'
 
@@ -44,7 +43,6 @@ function App() {
             [//Routes for Clients]
             <Route path='/clientlogin' element={<ClientLogin/>} />
             <Route path='/clientdashboard' element={<ClientDashboard />} />
-            <Route path='/clientregister' element={<ClientRegister />} />
             <Route path='/renewal' element={<Renewal />} />
             <Route path='/policies' element={<Policies />} />
             <Route path='/submissions' element={<Submissions />} />
@@ -54,7 +52,7 @@ function App() {
             <Route path='/contacts' element={<Contacts />} />
             <Route path='/claims' element={<Claims />} />
             <Route path='/invoices' element={<Invoices />} />
-            [//Routes for Insurance Reps]
+            [/Routes for Insurance Reps]
             <Route path='/registerClient' element={<RegisterClient />} />
             <Route path='/repLogin' element={<RepLogin/>} />
             <Route path='/repdashboard' element={<RepDashboard/>} />
@@ -65,13 +63,14 @@ function App() {
             <Route path='/repcoverages' element={<RepCoverages />} />
             <Route path='/repdocuments' element={<RepDocuments />} />
             <Route path='/rephistory' element={<RepHistory />} />
-            <Route path='/riskmanagement' element={<RiskManagement/>} />
+            <Route path='/repriskmanagement' element={<RiskManagement/>} />
             <Route path='/repstatus' element={<RepStatus />} />
             <Route path='/repsubmissions' element={<RepSubmissions />} />
           </Routes>
         </div>
       </Router>
       <ToastContainer />
+      
     </>
   )
 }

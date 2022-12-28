@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+
+const { ObjectId } = require('mongodb')
 var db = mongoose.createConnection(process.env.MONGO_URI)
 const schema = mongoose.Schema(
     {
@@ -15,10 +17,9 @@ const schema = mongoose.Schema(
             type: String,
             required: [true, 'Please add a password'],
         },
-        primaryBroker: {
-            type: String,
-            required: [true, 'Please add a password'],
-
+        brokerId: {
+            type: ObjectId,
+            required: true,
         },
         userType: {
             type: String,

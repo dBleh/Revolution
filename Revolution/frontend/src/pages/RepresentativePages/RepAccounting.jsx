@@ -1,8 +1,16 @@
+
+import { useSelector } from 'react-redux'
+import React from 'react';
+
 function RepAccounting() {
+  const {client} = useSelector((state)=>state.auth)
+ 
     return (
       <div>
-        RepAccounting coming Soon...
+
+      <p>{client ? client.name : "No Client selected "}</p>
       </div>
+     
     )
   }
   

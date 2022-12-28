@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { FaUser } from 'react-icons/fa'
 import {registerClient} from '../../features/auth/authSlice'
-import Spinner from '../../components/Spinner'
+
+import { changeClient, reset } from '../../features/auth/authSlice'
 
 
 
@@ -26,6 +27,7 @@ function RegisterClient() {
   const { user, isLoading, isError, message } = useSelector(
     (state) => state.auth
   )
+  const {client} = useSelector((state)=>state.auth)
 
   useEffect(() => {
     if (isError) {
@@ -51,16 +53,19 @@ function RegisterClient() {
         name,
         email,
         password,
-        primaryBroker: user.name,
+        brokerId: user._id,
         userType: "Client",
       }
       dispatch(registerClient(userData))
+      dispatch(changeClient(client))
+      navigate("/repdashboard")
+      return () => {
+        dispatch(reset())
+    }
     }
   }
 
-  if (isLoading) {
-    return <Spinner />
-  }
+
 
   return (
     <>

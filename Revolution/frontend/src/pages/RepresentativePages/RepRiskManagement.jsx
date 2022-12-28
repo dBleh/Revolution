@@ -1,4 +1,4 @@
-function RiskManagement() {
+function repRiskmanagement() {
     return (
       <div>
         RiskManagement coming Soon...
@@ -6,4 +6,4 @@ function RiskManagement() {
     )
   }
   
-  export default RiskManagement
+  export default repRiskmanagement

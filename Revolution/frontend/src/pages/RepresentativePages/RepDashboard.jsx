@@ -1,16 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect  } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import Client from '../../components/ClientList'
-import Spinner from '../../components/Spinner'
-import { getClients, reset } from '../../features/auth/authSlice'
-
+import { reset, getPolicies } from '../../features/auth/authSlice'
+import PolicyList  from '../../components/PolicyList'
 
 function RepDashboard() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { user, isError, message, isLoading } = useSelector((state) => state.auth)
-  const { clients } = useSelector((state) => state.auth)
+  const { user, isError, message } = useSelector((state) => state.auth)
+  const {policies} = useSelector((state)=>state.auth)
   useEffect(() => {
     if (isError) {
       console.log(message)
@@ -18,32 +16,30 @@ function RepDashboard() {
     if (user.userType !== "Broker") {
       navigate('/replogin')
     }
-    dispatch(getClients())
+    
+    dispatch(getPolicies(user))
     return () => {
       dispatch(reset())
     }
   }, [user, navigate, isError, message, dispatch])
-  if (isLoading) {
-    return <Spinner />
-  }
   return (
     <>
-      <section className='heading'>
-        <h1>Welcome {user && user.userType}</h1> 
-      </section>
-      <section className = 'page'>
-      <p>Dashboard</p>
-      </section>  
-        {clients.length > 0 ? (
-          <div className='renewals'>
-            {clients.map((client) => (
-              <Client key={client._id} client={client} />
-            ))}
+      
+      
+      <section className='page'>
+        <div className='box'>
+          <div className ='heading'>
+           
+            <div className='pBox'>
+            <PolicyList policies={policies}  sortBy="date" />
+            </div>
+          
           </div>
-        ) : (
-          <h3>You have no clients</h3>
-        )}
-     
+
+        </div>
+      </section>
+      
+      
     </>
   )
 }

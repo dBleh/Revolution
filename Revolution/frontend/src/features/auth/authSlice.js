@@ -1,19 +1,95 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
 
-// Get user from localStorage
+
+// Get User from localStorage
 const user = JSON.parse(localStorage.getItem('user'))
+// Get Client from localStorage
+const client = JSON.parse(localStorage.getItem('client'))
 
 const initialState = {
   clients: [],
+  pdfs:[],
+  policies:[],
+  client: client ? client : null,
   user: user ? user : null,
+  accessedUser: null,
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: '',
 }
 
-// Register user
+export const getPolicies = createAsyncThunk(
+  'auth/getPolicies',
+  async (user, thunkAPI) => {
+    try {
+    
+      return await authService.getPolicies(user)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const addPolicy = createAsyncThunk(
+  'auth/addPolicy',
+  async (formData, thunkAPI) => {
+    try {
+      return await authService.addPolicy(formData)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// Add Pdf
+export const addPdf = createAsyncThunk(
+  'auth/addPdf',
+  async (formData, thunkAPI) => {
+    try {
+      return await authService.addPdf(formData)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+export const getPdfs = createAsyncThunk(
+  'auth/getPdfs',
+  async (client, thunkAPI) => {
+    try {
+      return await authService.getPdfs(client)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// Register User
 export const register = createAsyncThunk(
   'auth/register',
   async (user, thunkAPI) => {
@@ -30,7 +106,7 @@ export const register = createAsyncThunk(
     }
   }
 )
-// Register user
+// Register Client
 export const registerClient = createAsyncThunk(
   'auth/registerClient',
   async (user, thunkAPI) => {
@@ -47,12 +123,14 @@ export const registerClient = createAsyncThunk(
     }
   }
 )
-//getClients
+
+
+//Get Clients for requested rep
 export const getClients = createAsyncThunk(
   'auth/getClients',
-  async (_,thunkAPI) => {
+  async (user,thunkAPI) => {
     try {
-      return await authService.getClients()
+      return await authService.getClients(user)
     } catch (error) {
       const message =
         (error.response &&
@@ -64,7 +142,24 @@ export const getClients = createAsyncThunk(
     }
   }
 )
+//Change Client for requested rep
+export const changeClient = createAsyncThunk(
+  'auth/changeClient',
+  async (client, thunkAPI) => {
+    try {
+      return await authService.changeClient(client)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
 
+    }
+  }
+)
 // Login user
 export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   try {
@@ -125,13 +220,58 @@ export const authSlice = createSlice({
       })
       .addCase(getClients.pending, (state) => {
         state.isLoading = true
+        
       })
       .addCase(getClients.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
         state.clients = action.payload
+        
       })
       .addCase(getClients.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(getPdfs.pending, (state) => {
+        state.isLoading = true
+        
+      })
+      .addCase(getPdfs.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.pdfs = action.payload
+        
+      })
+      .addCase(getPdfs.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(getPolicies.pending, (state) => {
+        state.isLoading = true
+        
+      })
+      .addCase(getPolicies.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.policies = action.payload
+        
+      })
+      .addCase(getPolicies.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(changeClient.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(changeClient.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.client = action.payload
+      })
+      .addCase(changeClient.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
@@ -139,6 +279,7 @@ export const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.user = null
       })
+      
   },
 })
 

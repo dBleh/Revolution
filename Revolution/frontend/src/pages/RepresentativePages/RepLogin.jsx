@@ -3,8 +3,8 @@ import { FaSignInAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { login, reset } from '../../features/auth/authSlice'
-import Spinner from '../../components/Spinner'
+import { login, reset, getClients, } from '../../features/auth/authSlice'
+
 
 function RepLogin() {
   const [formData, setFormData] = useState({
@@ -24,8 +24,8 @@ function RepLogin() {
     if (isError) {
       toast.error(message)
     }
-    if (isSuccess && user.userType === "Broker") {
-      navigate('/repdashboard')
+    if (isSuccess) {
+      navigate('/repstatus')
     }
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])
@@ -42,11 +42,10 @@ function RepLogin() {
       email,
       password,
     }
+    dispatch(getClients())
     dispatch(login(userData))
   }
-  if (isLoading) {
-    return <Spinner />
-  }
+ 
   return (
     <>
       <section className='heading'>
