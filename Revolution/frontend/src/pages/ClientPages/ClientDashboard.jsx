@@ -2,15 +2,10 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-
-
 function ClientDashboard() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const { user, isError, reset, message, isLoading } = useSelector((state) => state.auth)
-
-
+  const { user, isError, reset, message } = useSelector((state) => state.auth)
   useEffect(() => {
     if (isError) {
       console.log(message)
@@ -18,14 +13,10 @@ function ClientDashboard() {
     if (user.userType !== "Client") { 
       navigate('/clientlogin')
     }
-   
-
     return () => {
-      dispatch(reset())
+dispatch(reset())
     }
   }, [user, navigate,  message, dispatch, isError, reset])
-
- 
   return (
     <>
       <section className='heading'>
@@ -34,6 +25,5 @@ function ClientDashboard() {
         </section>
     </>
   )}
-
 
 export default ClientDashboard

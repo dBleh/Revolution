@@ -47,5 +47,5 @@ const schema = new mongoose.Schema({
 }, {
     timestamps: true
 })
-const polciySchema = db.model('policies', schema)
-module.exports = polciySchema
+const policySchema = db.model('policies', schema)
+module.exports = policySchema

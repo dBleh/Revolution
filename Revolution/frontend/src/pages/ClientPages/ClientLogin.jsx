@@ -3,7 +3,7 @@ import { FaSignInAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { login, reset } from '../../features/auth/authSlice'
+import { login, reset } from '../../features/Auth/authSlice'
 
 function ClientLogin() {
   const [formData, setFormData] = useState({
@@ -13,7 +13,7 @@ function ClientLogin() {
   const { email, password, } = formData
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { user,  isError, isSuccess, message } = useSelector(
     (state) => state.auth
   )
   useEffect(() => {
@@ -41,7 +41,6 @@ function ClientLogin() {
     }
     dispatch(login(userData))
   }
- 
   return (
     <>
       <section className='heading'>
@@ -50,7 +49,6 @@ function ClientLogin() {
         </h1>
         <p>Login and start setting goals</p>
       </section>
-
       <section className='form'>
         <form onSubmit={onSubmit}>
           <div className='form-group'>
@@ -75,7 +73,6 @@ function ClientLogin() {
               onChange={onChange}
             />
           </div>
-
           <div className='form-group'>
             <button type='submit' className='btn btn-block'>
               Submit

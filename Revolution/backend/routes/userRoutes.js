@@ -5,6 +5,7 @@ const multer = require('multer');
 const upload = multer();
 
 const {
+  addCompanyInformation,
   getPolicies,
   addPolicy,
   getPdfs,
@@ -21,6 +22,7 @@ const { protect } = require('../middleware/authMiddleware')
 router.post('/', registerUser)
 router.post('/registerClient',registerClient)
 router.post('/addPdf',upload.single('pdf'),addPdf)
+router.post('/addCompanyInformation', addCompanyInformation)
 router.post('/addPolicy', addPolicy)
 router.post('/login', loginUser)
 router.post('/changeClient', changeClient)

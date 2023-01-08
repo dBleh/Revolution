@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getPdfs } from '../../features/auth/authSlice'
+import { getPdfs } from '../../features/Auth/authSlice'
 
 function RepDocuments() {
-  const { user, client } = useSelector((state) => state.auth)
-  const { pdfs } = useSelector((state) => state.auth)
+  const { user, pdfs, client  } = useSelector((state) => state.auth)
+ 
   const [selectedPdf, setSelectedPdf] = useState(null)
   const dispatch = useDispatch()
   useEffect(() => {
@@ -13,18 +13,15 @@ function RepDocuments() {
     dispatch(getPdfs(ids))
     }
   }, [client, user, dispatch])
-
-  if (pdfs.length > 0 && !selectedPdf) {
+  if (pdfs?.length > 0 && !selectedPdf) {
     setSelectedPdf(pdfs[0])
   }
-
   const renderPdf = (pdf) => {
     setSelectedPdf(pdf)
   }
-
   return (
     <div >
-      {client ? ( 
+      {client && pdfs.length > 0 ? ( 
         <>
       <div className="dBox">
         <ul>
@@ -42,9 +39,7 @@ function RepDocuments() {
       </div>
       </>
       ):(
-        <>No Client selected </>)}
-        
-      
+        <> No Documents Available </>)}              
       </div>
   )
 }

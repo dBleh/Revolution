@@ -1,40 +1,37 @@
 import { FaSignOutAlt } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, reset } from '../features/auth/authSlice'
+import { logout, reset } from '../features/Auth/authSlice'
 import ClientSearchBar from '../components/ClientSearchForm'
+
 
 function Header() {
    const navigate = useNavigate()
    const dispatch = useDispatch()
-   const { user } = useSelector((state) => state.auth)
-   const { client } = useSelector((state) => state.auth)
-   const location = useLocation()
+   const { user, client } = useSelector((state) => state.auth)
+  
+ 
    const onLogout = () => {
       dispatch(logout())
       dispatch(reset())
-      navigate('/')
+      navigate('/homepage')
    }
    return (
       <header className='header'>
          <ul>
             {!user ? (
                <>
-                  <div className='logo'><Link to='/homepage'>Revo  </Link></div>
-                  
-                  
+                  <div className='logo'><Link to='/homepage'>Revo  </Link></div>                 
                   <ul>
                      <li><Link to='/clientlogin'>Client Login</Link></li>
                      <li><Link to='/replogin'>Broker Login</Link></li>
                      <li><Link to='/repregister'>Broker Registeration</Link></li>
                   </ul>
                </>//if the user type is of type client, present these pages.
-            ) : user.userType === "Client" ? (
+            ) : user.userType === "Client"  ? (
                <>
                   <div className='logo'>
-                     <Link to='/clientdashboard'>{user.name}</Link></div>
-                     <>{location.pathname.replace(/^\//, '')}</>
+                     <Link to='/clientdashboard'>{user.name}</Link></div>                     
                   <ul>
                      <li><Link to='/renewal'>Renewals</Link></li>
                      <li><Link to='/policies'>Policies</Link></li>
@@ -50,10 +47,8 @@ function Header() {
                </>
             ) : user.userType === "Broker" ? (
                <>
-                  <div className='logo'><Link to='/repdashboard'>R</Link></div>
-                  <div className='cP'>{location.pathname.substring(4)}</div>
-                  <ul>
-                     
+                  <div className='logo'><Link to='/repdashboard'>R</Link></div>                
+                  <ul>                     
                      <li><Link to='/repaccounting'>Accounting</Link></li>
                      <li><Link to='/repclaims'>Claims</Link></li>
                      <li><Link to='/repcontacts'>Contacts</Link></li>
@@ -70,7 +65,7 @@ function Header() {
                   </ul>
                </>
             ) : (
-               <li><button className='btn' onClick={onLogout}><FaSignOutAlt /> Logout</button></li>
+               <li><button className='btn' onClick={onLogout}><FaSignOutAlt />Logout</button></li>
             )}
          </ul>
       </header>

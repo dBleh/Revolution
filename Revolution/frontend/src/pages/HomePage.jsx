@@ -1,12 +1,9 @@
-
-
 function HomePage() {
     return (
         <>
-        Hello World
-         
+        Hello World        
         </>
     )
   }
-  
+
   export default HomePage

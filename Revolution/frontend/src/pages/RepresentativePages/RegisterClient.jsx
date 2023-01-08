@@ -3,11 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { FaUser } from 'react-icons/fa'
-import {registerClient} from '../../features/auth/authSlice'
-
-import { changeClient, reset } from '../../features/auth/authSlice'
-
-
+import {registerClient, changeClient, reset} from '../../features/Auth/authSlice'
 
 function RegisterClient() {
   const [formData, setFormData] = useState({
@@ -18,34 +14,28 @@ function RegisterClient() {
     primaryBroker: '',
     userType: '',
   })
-  
   const { name, email, password, password2, } = formData
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const { user, isLoading, isError, message } = useSelector(
+  const { user, isError, message } = useSelector(
     (state) => state.auth
   )
   const {client} = useSelector((state)=>state.auth)
-
   useEffect(() => {
     if (isError) {
       toast.error(message)
     }
     
   })
-
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
   }
-
+  console.log(user)
   const onSubmit = (e) => {
     e.preventDefault()
-
     if (password !== password2) {
       toast.error('Passwords do not match')
     } else {
@@ -64,9 +54,6 @@ function RegisterClient() {
     }
     }
   }
-
-
-
   return (
     <>
       <section className='heading'>
@@ -75,7 +62,6 @@ function RegisterClient() {
         </h1>
         <p>Please create an account</p>
       </section>
-
       <section className='form'>
         <form onSubmit={onSubmit}>
           <div className='form-group'>

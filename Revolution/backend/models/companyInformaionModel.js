@@ -1,13 +1,21 @@
 const mongoose = require('mongoose')
+const { ObjectId } = require('mongodb')
 var db = mongoose.createConnection(process.env.MONGO_URI)
 const schema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
+    clientId: {
+      type: ObjectId,
       required: true,
-      ref: 'User',
     },
-    companyName: {
+    repId: {
+      type: ObjectId,
+      required: true,
+    },
+    business_Type: {
+      type: String,
+      required: [true, 'Please add the business type'],
+    },
+    company_name: {
       type: String,
       required: [true, 'Please add the company name'],
     },
@@ -24,5 +32,5 @@ const schema = mongoose.Schema(
     timestamps: true,
   }
 )
-const companyInformation = db.model('CompanyInformation', schema)
-module.exports = companyInformation
+const CompanyInformation = db.model('companyInformation', schema)
+module.exports = CompanyInformation

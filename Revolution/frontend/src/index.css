@@ -36,7 +36,16 @@ iframe{
   font-size: small;
   color: #acacacd0;
 }
-
+.cfb{
+  margin-left: 40.5vw;
+  margin-top: 5vh;
+  position: absolute; 
+  position: center;
+  background-color: #ffffff;
+  border-radius: 1em;
+  width: 50vw;
+  z-index: 0;
+}
 .pfb{
   margin-left: 40.5vw;
   margin-top: 5vh;
@@ -156,8 +165,7 @@ h3 {
   position: absolute;
   background-color: #ffffff;
   margin-left: .25vw;
-  min-width: 9.85vw;
-  max-width: 9.85vw;
+  width: 9.8vw;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   z-index: 100;

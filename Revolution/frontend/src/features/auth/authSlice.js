@@ -8,7 +8,7 @@ const user = JSON.parse(localStorage.getItem('user'))
 const client = JSON.parse(localStorage.getItem('client'))
 
 const initialState = {
-  clients: [],
+  clients:[],
   pdfs:[],
   policies:[],
   client: client ? client : null,
@@ -54,8 +54,24 @@ export const addPolicy = createAsyncThunk(
     }
   }
 )
+export const addCompanyInformation = createAsyncThunk(
+  'auth/addCompanyInformation',
+  async (formData, thunkAPI) => {
+    try {
+      return await authService.addCompanyInformation(formData)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        console.log(message)
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 
-// Add Pdf
 export const addPdf = createAsyncThunk(
   'auth/addPdf',
   async (formData, thunkAPI) => {
@@ -142,6 +158,7 @@ export const getClients = createAsyncThunk(
     }
   }
 )
+
 //Change Client for requested rep
 export const changeClient = createAsyncThunk(
   'auth/changeClient',
@@ -160,8 +177,10 @@ export const changeClient = createAsyncThunk(
     }
   }
 )
+
 // Login user
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
+export const login = createAsyncThunk(
+    'auth/login', async (user, thunkAPI) => {
   try {
     return await authService.login(user)
   } catch (error) {
@@ -169,13 +188,17 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString()
+      console.log(message)
     return thunkAPI.rejectWithValue(message)
   }
 })
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout()
+ 
+  authService.logout()
+ 
 })
+
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -186,6 +209,8 @@ export const authSlice = createSlice({
       state.isSuccess = false
       state.isError = false
       state.message = ''
+      state.pdfs = false
+      
     },
   },
   extraReducers: (builder) => {
@@ -276,9 +301,16 @@ export const authSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+     
       .addCase(logout.fulfilled, (state) => {
         state.user = null
+        state.client = null
+       
+        state.pdfs = null
+        state.policies = null
+        state.rep = null
       })
+      
       
   },
 })

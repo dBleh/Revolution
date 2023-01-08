@@ -3,7 +3,7 @@ import { FaSignInAlt } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { login, reset, getClients, } from '../../features/auth/authSlice'
+import {  reset, login } from '../../features/Auth/authSlice'
 
 
 function RepLogin() {
@@ -11,13 +11,10 @@ function RepLogin() {
     email: '',
     password: '',
   })
-
   const { email, password, } = formData
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { user,isError, isSuccess, message } = useSelector(
     (state) => state.auth
   )
   useEffect(() => {
@@ -29,7 +26,6 @@ function RepLogin() {
     }
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])
-
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -42,10 +38,8 @@ function RepLogin() {
       email,
       password,
     }
-    dispatch(getClients())
     dispatch(login(userData))
   }
- 
   return (
     <>
       <section className='heading'>
@@ -54,7 +48,6 @@ function RepLogin() {
         </h1>
         <p>Brokerage Login</p>
       </section>
-
       <section className='form'>
         <form onSubmit={onSubmit}>
           <div className='form-group'>
@@ -79,7 +72,6 @@ function RepLogin() {
               onChange={onChange}
             />
           </div>
-
           <div className='form-group'>
             <button type='submit' className='btn btn-block'>
               Submit

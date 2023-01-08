@@ -1,37 +1,41 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { changeClient, reset,getClients } from '../features/auth/authSlice'
+import { changeClient, reset, getClients } from '../features/Auth/authSlice'
 import { Input, List } from 'antd'
 
 function ClientSearchBar() {
-    const [searchUser, setSearchUser] = useState('')
-    const [isFocused, setIsFocused] = useState(false)
-    const { clients, user } = useSelector((state) => state.auth)
 
-    let filteredClients = clients
-    const dispatch = useDispatch()
-    const handleChange = (e) => {
-        
-        e.preventDefault()
-        setSearchUser(e.target.value)
-    }
+  const dispatch = useDispatch();
+  const { user, clients } = useSelector((state) => state.auth)
+  
+  const [searchUser, setSearchUser] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
+ 
+  let filteredClients = clients
 
-    const handleFocus = () =>{
-        dispatch(getClients(user))
-        setIsFocused(true)
-    } 
-    const handleBlur = (event) => {
-        if (event.target.className !== 'sItem') {
-            setIsFocused(false)
-        }
+  const handleChange = (e) => {
+    dispatch(getClients(user));
+    e.preventDefault()
+    setSearchUser(e.target.value)
+  }
+
+  const handleFocus = () =>{    
+    
+    setIsFocused(true)
+  } 
+  const handleBlur = (event) => {
+    if (event.target.className !== 'sItem') {
+        setIsFocused(false)
     }
+  }
     if (searchUser.length === 0 && isFocused) {
         filteredClients = clients
     } else {
-        filteredClients = clients.filter((client) => client.name.toLowerCase().includes(searchUser.toLowerCase()))
+        if(clients > 0){
+        filteredClients = clients?.filter((client) => client.name.toLowerCase().includes(searchUser.toLowerCase()))
     }
+}
     const handleMouseDown = (client) => {
-        
         dispatch(changeClient(client))
         setSearchUser(client.name)
         dispatch(reset())

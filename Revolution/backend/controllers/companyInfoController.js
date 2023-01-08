@@ -32,28 +32,23 @@ const setCompanyInformation = asyncHandler(async (req, res) => {
 // @access  Private
 const updateCompanyInformation = asyncHandler(async (req, res) => {
   const companyInformation = await CompanyInformation.findById(req.params.id)
-
   if (!companyInformation) {
     res.status(400)
     throw new Error('CompanyInformation not found')
   }
-
   // Check for user
   if (!req.user) {
     res.status(401)
     throw new Error('User not found')
   }
-
   // Make sure the logged in user matches the companyInformation user
   if (companyInformation.user.toString() !== req.user.id) {
     res.status(401)
     throw new Error('User not authorized')
   }
-
   const updatedCompanyInformation = await CompanyInformation.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   })
-
   res.status(200).json(updatedCompanyInformation)
 })
 
@@ -62,24 +57,20 @@ const updateCompanyInformation = asyncHandler(async (req, res) => {
 // @access  Private
 const deleteCompanyInformation = asyncHandler(async (req, res) => {
   const companyInformation = await CompanyInformation.findById(req.params.id)
-
   if (!companyInformation) {
     res.status(400)
     throw new Error('CompanyInformation not found')
   }
-
   // Check for user
   if (!req.user) {
     res.status(401)
     throw new Error('User not found')
   }
-
   // Make sure the logged in user matches the companyInformation user
   if (companyInformation.user.toString() !== req.user.id) {
     res.status(401)
     throw new Error('User not authorized')
   }
-
   await companyInformation.remove()
 
   res.status(200).json({ id: req.params.id })

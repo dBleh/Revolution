@@ -1,7 +1,7 @@
 import { useEffect  } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { reset, getPolicies } from '../../features/auth/authSlice'
+import { reset, getPolicies } from '../../features/Auth/authSlice'
 import PolicyList  from '../../components/PolicyList'
 
 function RepDashboard() {
@@ -16,30 +16,22 @@ function RepDashboard() {
     if (user.userType !== "Broker") {
       navigate('/replogin')
     }
-    
     dispatch(getPolicies(user))
     return () => {
       dispatch(reset())
     }
   }, [user, navigate, isError, message, dispatch])
   return (
-    <>
-      
-      
+    <>   
       <section className='page'>
         <div className='box'>
-          <div className ='heading'>
-           
+          <div className ='heading'>           
             <div className='pBox'>
             <PolicyList policies={policies}  sortBy="date" />
-            </div>
-          
+            </div>          
           </div>
-
         </div>
-      </section>
-      
-      
+      </section>      
     </>
   )
 }

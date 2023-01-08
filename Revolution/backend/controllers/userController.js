@@ -5,12 +5,35 @@ const User = require('../models/userModel')
 const Client = require('../models/clientModel')
 const PDF = require('../models/pdfModel')
 const Policy = require('../models/policyModel')
+const CompanyInformation = require('../models/companyInformaionModel.js')
 
+const addCompanyInformation = asyncHandler(async (req, res) => {
 
-const getPolicies = asyncHandler(async (req, res) => {
+  const { repId, clientId, business_Type, company_name, sic_code, annual_revenue,  } = req.body
+  if (!business_Type || !company_name || !sic_code || !annual_revenue ) {
+    res.status(400)
+    throw new Error('Please add all fields')
+  }
+  const companyInformation  = new CompanyInformation({
+    repId: repId,
+    clientId: clientId,
+    business_Type: business_Type,
+    company_name: company_name,
+    sic_code: sic_code,
+    annual_revenue: annual_revenue,
+  })
+  companyInformation.save((error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Company Information saved successfully');
+    }
+  });
   
+})
+
+const getPolicies = asyncHandler(async (req, res) => { 
   const policies = await Policy.find({ "repId": req.body._id })
- 
    res.status(200).json(policies)
 });
 
@@ -78,16 +101,12 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('Please add all fields')
   }
-
   // Check if user exists
   const userExists = await User.findOne({ email })
-
   if (userExists) {
     res.status(400)
     throw new Error('User already exists')
   }
-
-
   // Hash password
   const salt = await bcrypt.genSalt(10)
   const hashedPassword = await bcrypt.hash(password, salt)
@@ -98,7 +117,6 @@ const registerUser = asyncHandler(async (req, res) => {
     password: hashedPassword,
     userType,
   })
-
   if (user) {
     res.status(201).json({
       _id: user.id,
@@ -111,7 +129,6 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('Invalid user data')
   }
-
 })
 
 const registerClient = asyncHandler(async (req, res) => {
@@ -194,8 +211,9 @@ const loginUser = asyncHandler(async (req, res) => {
 
 // get all clients
 const getClients = asyncHandler(async (req, res) => {
-  const user = await Client.find({"brokerId": req.body._id}, { name: 1, email: 1, userType: 1, primaryBroker: 1, _id: 1 })
-  res.status(200).json(user)
+
+  const rep = await Client.find({"brokerId": req.body._id}, { name: 1, email: 1, userType: 1, primaryBroker: 1, _id: 1 })
+  res.status(200).json(rep)
 
 })
 const changeClient = asyncHandler(async (req, res) => {
@@ -217,6 +235,7 @@ const generateToken = (id) => {
 }
 
 module.exports = {
+  addCompanyInformation,
   getPolicies,
   addPolicy,
   getPdfs,
