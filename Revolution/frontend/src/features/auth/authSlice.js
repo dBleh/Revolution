@@ -20,6 +20,7 @@ const initialState = {
   message: '',
 }
 
+// Get all policies for user
 export const getPolicies = createAsyncThunk(
   'auth/getPolicies',
   async (user, thunkAPI) => {
@@ -38,6 +39,7 @@ export const getPolicies = createAsyncThunk(
   }
 )
 
+// Add a policy to the currently selected Client
 export const addPolicy = createAsyncThunk(
   'auth/addPolicy',
   async (formData, thunkAPI) => {
@@ -54,6 +56,8 @@ export const addPolicy = createAsyncThunk(
     }
   }
 )
+
+//Add Company Information
 export const addCompanyInformation = createAsyncThunk(
   'auth/addCompanyInformation',
   async (formData, thunkAPI) => {
@@ -72,6 +76,7 @@ export const addCompanyInformation = createAsyncThunk(
   }
 )
 
+// Add a PDF for selected Client
 export const addPdf = createAsyncThunk(
   'auth/addPdf',
   async (formData, thunkAPI) => {
@@ -88,6 +93,8 @@ export const addPdf = createAsyncThunk(
     }
   }
 )
+
+// Get All PDF's for selected Client
 export const getPdfs = createAsyncThunk(
   'auth/getPdfs',
   async (client, thunkAPI) => {
@@ -122,6 +129,7 @@ export const register = createAsyncThunk(
     }
   }
 )
+
 // Register Client
 export const registerClient = createAsyncThunk(
   'auth/registerClient',
@@ -140,8 +148,7 @@ export const registerClient = createAsyncThunk(
   }
 )
 
-
-//Get Clients for requested rep
+//Get all Clients for requested rep
 export const getClients = createAsyncThunk(
   'auth/getClients',
   async (user,thunkAPI) => {
