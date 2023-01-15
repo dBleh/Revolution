@@ -5,7 +5,41 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+.popup-box {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+.close-icon {
+  content: 'x';
+  cursor: pointer;
+  position: fixed;
+  right: calc(15% - 30px);
+  top: calc(100vh - 85vh - 33px);
+  background: #ededed;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  line-height: 20px;
+  text-align: center;
+  border: 1px solid #999;
+  font-size: 20px;
+}
+.popbox {
+  position: relative;
+  width: 70%;
+  margin: 0 auto;
+  height: auto;
+  max-height: 70vh;
+  margin-top: calc(100vh - 85vh - 20px);
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px;
+  border: 1px solid #999;
+  overflow: auto;
+}
 iframe {
   margin-top: 0vh;
   margin-bottom: 2vh;
@@ -33,11 +67,11 @@ iframe {
  
 }
 .react-calendar__tile:hover {
-  background-color: #A386E0;
+  background-color: #240567;
 }
 .react-calendar__tile:active {
   padding: 20px;
-  background-color: #86a2e0;
+  background-color: #e08698;
 }
 .react-calendar__navigation__label {
   border: 0;
@@ -50,7 +84,7 @@ iframe {
   padding: 20px;
 }
 .selected-tile {
-  background-color: #ac89f7; /* or any other color */
+  background-color: #f78989; /* or any other color */
 }
 .event-info {
   margin-top: 5px;
