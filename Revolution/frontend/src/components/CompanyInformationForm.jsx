@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, InputNumber, Slider, Button} from 'antd';
+import { Form, Input, InputNumber, Button} from 'antd';
 
 
 const CompanyInformationForm = ({ onSubmit }) => {

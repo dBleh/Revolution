@@ -6,6 +6,46 @@ const Client = require('../models/clientModel')
 const PDF = require('../models/pdfModel')
 const Policy = require('../models/policyModel')
 const CompanyInformation = require('../models/companyInformaionModel.js')
+const CalendarModel = require('../models/calendarModel.js')
+
+
+const deleteCalendarEvent = asyncHandler(async(req,res) => {
+  const deleteEvent = await CalendarModel.findById(req.params.id)
+  if(!deleteEvent){
+    res.status(400)
+  }
+  await deleteEvent.remove()
+})
+const getCalendarEvents = asyncHandler(async (req, res) => { 
+  const events = await CalendarModel.find({ "repId": req.body._id })
+   res.status(200).json(events)
+});
+
+const addCalendarEvent = asyncHandler(async (req, res) => {
+  
+  const { repId,day,info, startTime, endTime } = req.body
+  
+  if (!repId || !info) {
+    res.status(400)
+    throw new Error('Please add all fields')
+  }
+  
+  const cEvent = new CalendarModel({
+    repId: repId,
+    info: info,
+    day: day,
+    startTime: startTime ? startTime : 0,
+    endTime: endTime ? endTime: 0,
+  })
+  cEvent.save((error) => {
+    if (error) {
+      console.log('hi');
+    } else {
+      console.log('Event saved successfully');
+    }
+  });
+  
+})
 
 const addCompanyInformation = asyncHandler(async (req, res) => {
 
@@ -235,6 +275,9 @@ const generateToken = (id) => {
 }
 
 module.exports = {
+  deleteCalendarEvent,
+  getCalendarEvents,
+  addCalendarEvent,
   addCompanyInformation,
   getPolicies,
   addPolicy,

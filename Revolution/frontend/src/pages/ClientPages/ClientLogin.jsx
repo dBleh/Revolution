@@ -47,7 +47,7 @@ function ClientLogin() {
         <h1>
           <FaSignInAlt /> Login
         </h1>
-        <p>Login and start setting goals</p>
+        <p>Login</p>
       </section>
       <section className='form'>
         <form onSubmit={onSubmit}>

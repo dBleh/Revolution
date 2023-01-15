@@ -46,7 +46,7 @@ function ClientSearchBar() {
     const handleMouseLeave = (event) => {
         event.target.style.backgroundColor = 'transparent'
     }
-
+    
     return (
         <div>
             <Input

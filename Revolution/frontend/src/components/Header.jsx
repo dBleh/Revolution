@@ -59,6 +59,7 @@ function Header() {
                      <li><Link to='/repstatus'>Status</Link></li>
                      <li><Link to='/repsubmissions'>Submissions</Link></li>
                      <li><Link to='/registerclient'>Register Client</Link></li>
+                     <li><Link to='/repCalendar'>Calendar</Link></li>
                      <li><ClientSearchBar /></li>
                      <li>{client ? client.name.length > 18 ? client.name.substring(0, 15) + '...' : client.name : ""}</li>
                      <button className='logBtn' onClick={onLogout}>{user.name} logout</button>

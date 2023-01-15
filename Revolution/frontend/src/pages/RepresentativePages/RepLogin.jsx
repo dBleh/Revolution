@@ -21,8 +21,8 @@ function RepLogin() {
     if (isError) {
       toast.error(message)
     }
-    if (isSuccess) {
-      navigate('/repstatus')
+    if (isSuccess && user) {
+      navigate('/repdashboard')
     }
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])

@@ -1,7 +1,27 @@
 import axios from 'axios'
+
 const API_URL = '/api/users/'
 
 //Representative Service Section
+//Delete Calendar Event
+const deleteCalendarEvent = async (eventId) => {
+  const response = await axios.delete(API_URL +eventId)
+  return response.data
+}
+//Get Calendar Events
+const getCalendarEvents = async(user) => {  
+  const response = await axios.post(API_URL + 'getCalendarEvents', user)
+  if(response){
+    localStorage.setItem("events", response)
+  }
+  return response.data
+}
+//Add Calendar Data
+const addCalendarEvent = async(formData) => {
+  console.log(formData)
+  const response = await axios.post(API_URL + 'addCalendarEvent', formData)
+  return response.data
+}
 
 // Register Representative Data 
 const register = async (userData) => {
@@ -14,15 +34,14 @@ const register = async (userData) => {
 
 //Representative to Client Service Section
 
+  
 // Add Company Information Form
 const addCompanyInformation = async (formData) => {
   const response = await axios.post(API_URL + 'addCompanyInformation', formData)
-   console.log(response.data)
   return response.data;
 };
 //Get All Policies for all of Representatives Clients
 const getPolicies = async (user) => {
-
   const response = await axios.post(API_URL + 'getPolicies', user)
   if(response){
     localStorage.setItem("policies", response)
@@ -96,6 +115,9 @@ const login = async (userData) => {
 }
 
 const authService = {
+  deleteCalendarEvent,
+  getCalendarEvents,
+  addCalendarEvent,
   addCompanyInformation,
   getPolicies,
   addPolicy,

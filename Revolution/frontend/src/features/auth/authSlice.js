@@ -11,6 +11,7 @@ const initialState = {
   clients:[],
   pdfs:[],
   policies:[],
+  events:[],
   client: client ? client : null,
   user: user ? user : null,
   accessedUser: null,
@@ -20,6 +21,56 @@ const initialState = {
   message: '',
 }
 
+//Delete selected calendar event
+export const deleteCalendarEvent = createAsyncThunk(
+  'auth/deleteCalendarEvent',
+  async (id, thunkAPI) => {
+    try {
+      return await authService.deleteCalendarEvent(id)
+    } catch (error) {
+      const message = (error.response && 
+        error.response.data && 
+        error.response.data.message) || error.message || error.toString()
+ 
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+//Get all calendar events for required Broker
+export const getCalendarEvents = createAsyncThunk(
+  'auth/getCalendarEvents',
+  async (user, thunkAPI) => {
+    try {
+      return await authService.getCalendarEvents(user)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+//Add a calendar event for Broker
+export const addCalendarEvent = createAsyncThunk(
+  'auth/addCalendarEvent',
+  async (formData, thunkAPI) => {
+    try {
+      return await authService.addCalendarEvent(formData)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        console.log(message)
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 // Get all policies for user
 export const getPolicies = createAsyncThunk(
   'auth/getPolicies',
@@ -217,11 +268,19 @@ export const authSlice = createSlice({
       state.isError = false
       state.message = ''
       state.pdfs = false
-      
     },
+    removeEvent: (state, action) => {
+      state.events = state.events.filter(event => event.id !== action.payload);
+  },
+  
   },
   extraReducers: (builder) => {
     builder
+    .addCase(deleteCalendarEvent.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSuccess = true
+      state.events = state.events.filter((event)=> event._id !== action.payload.id)
+    })
       .addCase(register.pending, (state) => {
         state.isLoading = true
       })
@@ -295,6 +354,21 @@ export const authSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
+      .addCase(getCalendarEvents.pending, (state) => {
+        state.isLoading = true
+        
+      })
+      .addCase(getCalendarEvents.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.events = action.payload
+        
+      })
+      .addCase(getCalendarEvents.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
       .addCase(changeClient.pending, (state) => {
         state.isLoading = true
       })
@@ -312,7 +386,7 @@ export const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.user = null
         state.client = null
-       
+        state.events = null
         state.pdfs = null
         state.policies = null
         state.rep = null
@@ -322,5 +396,5 @@ export const authSlice = createSlice({
   },
 })
 
-export const { reset } = authSlice.actions
+export const { reset, removeEvent } = authSlice.actions
 export default authSlice.reducer

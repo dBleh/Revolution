@@ -5,6 +5,9 @@ const multer = require('multer');
 const upload = multer();
 
 const {
+  deleteCalendarEvent,
+  getCalendarEvents,
+  addCalendarEvent,
   addCompanyInformation,
   getPolicies,
   addPolicy,
@@ -29,6 +32,9 @@ router.post('/changeClient', changeClient)
 router.post('/getPdfs', getPdfs)
 router.post('/getPolicies', getPolicies)
 router.post('/getClients', getClients)
+router.post('/addCalendarEvent', addCalendarEvent)
+router.post('/getCalendarEvents', getCalendarEvents)
+router.delete('/:id', deleteCalendarEvent)
 
 router.get('/me', protect, getMe)
 

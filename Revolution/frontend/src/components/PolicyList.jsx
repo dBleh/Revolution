@@ -54,12 +54,16 @@ const columns = [
   },
 ];
 
-const PolicyList = ({ policies}) => {
-  return (
+const PolicyList = ({ policies }) => {
+  return policies ? (
     <Table
       columns={columns}
-      dataSource={policies}
+      dataSource={policies.map((policy, index) => {
+        return {...policy, key: index};
+      })}
     />
+  ) : (
+    <div>Loading policies</div>
   );
 };
 export default PolicyList

@@ -30,6 +30,7 @@ import RepSubmissions from './pages/RepresentativePages/RepSubmissions'
 import RiskManagement from './pages/RepresentativePages/RepRiskManagement'
 import RepRegister from './pages/RepresentativePages/RepRegister'
 import RegisterClient from './pages/RepresentativePages/RegisterClient'
+import RepCalendar from './pages/RepresentativePages/RepCalendar'
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
             <Route path='/repriskmanagement' element={<RiskManagement/>} />
             <Route path='/repstatus' element={<RepStatus />} />
             <Route path='/repsubmissions' element={<RepSubmissions />} />
+            <Route path='/repCalendar' element={<RepCalendar/>} />
           </Routes>
         </div>
       </Router>
