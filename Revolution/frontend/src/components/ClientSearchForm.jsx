@@ -6,7 +6,7 @@ import { Input, List } from 'antd'
 function ClientSearchBar() {
 
   const dispatch = useDispatch();
-  const { user, clients } = useSelector((state) => state.auth)
+  const { user, clients, client } = useSelector((state) => state.auth)
   
   const [searchUser, setSearchUser] = useState('')
   const [isFocused, setIsFocused] = useState(false)
@@ -52,7 +52,7 @@ function ClientSearchBar() {
             <Input
                 className="sBar"
                 type="search"
-                placeholder="Search here"
+                placeholder={client ? client.name : "Search here"}
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}

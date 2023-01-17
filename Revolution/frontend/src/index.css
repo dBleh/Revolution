@@ -5,6 +5,48 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* Dropdown Button */
+.dropbtn {
+  background-color:#1f1e1e;
+  color: #999;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color:#ddd;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+
 .popup-box {
   position: fixed;
   width: 100%;
@@ -67,11 +109,11 @@ iframe {
  
 }
 .react-calendar__tile:hover {
-  background-color: #240567;
+  background-color: #A386E0;
 }
 .react-calendar__tile:active {
   padding: 20px;
-  background-color: #e08698;
+  background-color: #86a2e0;
 }
 .react-calendar__navigation__label {
   border: 0;
@@ -84,7 +126,7 @@ iframe {
   padding: 20px;
 }
 .selected-tile {
-  background-color: #f78989; /* or any other color */
+  background-color: #ac89f7; /* or any other color */
 }
 .event-info {
   margin-top: 5px;
