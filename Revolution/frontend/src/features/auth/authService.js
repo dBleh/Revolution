@@ -34,6 +34,22 @@ const register = async (userData) => {
 
 //Representative to Client Service Section
 
+
+const addContactInfo = async (formData) => {
+  const response = await axios.post(API_URL + 'addContactInfo', formData)
+   
+  return response.data;
+};
+
+//Get Client Contact Info
+const getClientContactInfo = async(client) =>{
+  const response = await axios.post(API_URL + 'getClientContactInfo', client)
+  if(response.data){
+    localStorage.setItem('contacts',JSON.stringify(response))
+
+  }
+  return response.data
+}
   
 // Add Company Information Form
 const addCompanyInformation = async (formData) => {
@@ -115,6 +131,8 @@ const login = async (userData) => {
 }
 
 const authService = {
+  addContactInfo,
+  getClientContactInfo,
   deleteCalendarEvent,
   getCalendarEvents,
   addCalendarEvent,

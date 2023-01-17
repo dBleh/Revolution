@@ -12,6 +12,7 @@ const initialState = {
   pdfs:[],
   policies:[],
   events:[],
+  contacts:[],
   client: client ? client : null,
   user: user ? user : null,
   accessedUser: null,
@@ -20,6 +21,38 @@ const initialState = {
   isLoading: false,
   message: '',
 }
+//Add Contact Form for selected client
+export const addContactInfo = createAsyncThunk(
+  'auth/addContactInfo',
+  async (formData, thunkAPI) => {
+    try {
+      return await authService.addContactInfo(formData)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+//Get Contact Info for selected Client
+export const getClientContactInfo = createAsyncThunk(
+  'auth/getClientContactInfo',
+  async(client, thunkAPI) => {
+    try{
+      return await authService.getClientContactInfo(client)
+    }catch (error) {
+      const message = (error.response && 
+        error.response.data && 
+        error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 
 //Delete selected calendar event
 export const deleteCalendarEvent = createAsyncThunk(
@@ -320,6 +353,21 @@ export const authSlice = createSlice({
         
       })
       .addCase(getClients.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(getClientContactInfo.pending, (state) => {
+        state.isLoading = true
+        
+      })
+      .addCase(getClientContactInfo.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.contacts = action.payload
+        
+      })
+      .addCase(getClientContactInfo.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

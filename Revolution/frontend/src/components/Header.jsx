@@ -8,7 +8,7 @@ import ClientSearchBar from '../components/ClientSearchForm'
 function Header() {
    const navigate = useNavigate()
    const dispatch = useDispatch()
-   const { user, client } = useSelector((state) => state.auth)
+   const { user } = useSelector((state) => state.auth)
 
 
    const onLogout = () => {
@@ -64,7 +64,7 @@ function Header() {
                         </div>
                      </li>
                      <li><Link to='/rephistory'>History</Link></li>
-                     <li><Link to='/repriskmanagement'>Contacts</Link></li>
+                     <li><Link to='/repriskmanagement'>Risk Managment</Link></li>
                      <li><Link to='/repstatus'>Status</Link></li>
                      <li><Link to='/repsubmissions'>Submissions</Link></li>
                      <li><Link to='/registerclient'>Register Client</Link></li>

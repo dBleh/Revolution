@@ -7,7 +7,38 @@ const PDF = require('../models/pdfModel')
 const Policy = require('../models/policyModel')
 const CompanyInformation = require('../models/companyInformaionModel.js')
 const CalendarModel = require('../models/calendarModel.js')
+const ContactInfoModel = require('../models/contactInfoModel')
 
+const addContactInfo = asyncHandler(async (req, res) => {
+
+  const { clientId, legalEntityName, email, phoneNumber } = req.body
+  
+  if (!legalEntityName || !email || !phoneNumber ) {
+    res.status(400)
+    throw new Error('Please add all fields')
+  }
+  const contactInfo = new ContactInfoModel({
+    clientId: clientId,
+    legalEntityName: legalEntityName,
+    email: email,
+    phoneNumber: phoneNumber,
+  })
+  contactInfo.save((error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Contact Information saved successfully');
+    }
+  });
+  
+})
+
+
+const getClientContactInfo = asyncHandler(async (req, res) => { 
+  
+  const events = await ContactInfoModel.find({ "clientID": req.body._id })
+   res.status(200).json(events)
+});
 
 const deleteCalendarEvent = asyncHandler(async(req,res) => {
   const deleteEvent = await CalendarModel.findById(req.params.id)
@@ -275,6 +306,8 @@ const generateToken = (id) => {
 }
 
 module.exports = {
+  addContactInfo,
+  getClientContactInfo,
   deleteCalendarEvent,
   getCalendarEvents,
   addCalendarEvent,

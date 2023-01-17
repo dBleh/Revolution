@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
+const { ObjectId } = require('mongodb')
 var db = mongoose.createConnection(process.env.MONGO_URI)
 const schema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
+    clientId: {
+      type: ObjectId,
       required: true,
-      ref: 'User',
+      
     },
     legalEntityName: {
       type: String,
@@ -14,10 +15,10 @@ const schema = mongoose.Schema(
     email: {
       type: String,
       required: [true, 'Please add an email'],
-      unique: true,
     },
     phoneNumber: {
-      type: String,
+      type: Number,
+      required: [true, 'Please add an email'],
     },
   },
   {

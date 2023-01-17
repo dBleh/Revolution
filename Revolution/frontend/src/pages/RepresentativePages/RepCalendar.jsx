@@ -11,7 +11,7 @@ function RepCalendar() {
     const { user, events } = useSelector((state) => state.auth)
     const [selectedDate, setSelectedDate] = useState("");
     const [isOpen, setIsOpen] = useState(false);
-    const [eIsOpen, setEIsOpen] = useState(false);
+    const [eIsOpen, setEIsOpen] = useState(true);
 
     let [eventsOnClickedDay, setEventsOnClickedDay] = useState("")
     const togglePopup = () => {
@@ -104,7 +104,7 @@ function RepCalendar() {
                     <Button onClick={newEvent}>add event</Button>
                     {!eIsOpen ? 
                     <CalendarForm onSubmit={onSubmit} />:
-                    <>hi</>
+                    null
                     }
                     </div>}
                     

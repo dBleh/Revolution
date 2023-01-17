@@ -5,6 +5,8 @@ const multer = require('multer');
 const upload = multer();
 
 const {
+  addContactInfo,
+  getClientContactInfo,
   deleteCalendarEvent,
   getCalendarEvents,
   addCalendarEvent,
@@ -22,6 +24,8 @@ const {
 } = require('../controllers/userController')
 const { protect } = require('../middleware/authMiddleware')
 
+
+router.post('/addContactInfo', addContactInfo)
 router.post('/', registerUser)
 router.post('/registerClient',registerClient)
 router.post('/addPdf',upload.single('pdf'),addPdf)
@@ -34,6 +38,7 @@ router.post('/getPolicies', getPolicies)
 router.post('/getClients', getClients)
 router.post('/addCalendarEvent', addCalendarEvent)
 router.post('/getCalendarEvents', getCalendarEvents)
+router.post('/getClientContactInfo', getClientContactInfo)
 router.delete('/:id', deleteCalendarEvent)
 
 router.get('/me', protect, getMe)
