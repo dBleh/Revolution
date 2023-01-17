@@ -31,6 +31,7 @@ import RiskManagement from './pages/RepresentativePages/RepRiskManagement'
 import RepRegister from './pages/RepresentativePages/RepRegister'
 import RegisterClient from './pages/RepresentativePages/RegisterClient'
 import RepCalendar from './pages/RepresentativePages/RepCalendar'
+import RepClientDetails from './pages/RepresentativePages/RepClientDetails'
 
 function App() {
   return (
@@ -54,7 +55,8 @@ function App() {
             <Route path='/claims' element={<Claims />} />
             <Route path='/invoices' element={<Invoices />} />
             [/Routes for Insurance Reps]
-            <Route path='/registerClient' element={<RegisterClient />} />
+            <Route path= '/repclientdetails' element={<RepClientDetails/>} />
+            <Route path='/registerclient' element={<RegisterClient />} />
             <Route path='/repLogin' element={<RepLogin/>} />
             <Route path='/repdashboard' element={<RepDashboard/>} />
             <Route path='/repregister' element={<RepRegister />} />

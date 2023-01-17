@@ -58,6 +58,8 @@ function Header() {
                            <button class="dropbtn">Documents</button>
                            <div class="dropdown-content">
                               <li><Link to='/repdocuments'>Documents</Link></li>
+                              <li><Link to='/repclientdetails'>Client Info</Link></li>
+
                            </div>
                         </div>
                      </li>
@@ -72,7 +74,9 @@ function Header() {
                         <div class="dropdown">
                            <button class="dropbtn">Settings</button>
                            <div class="dropdown-content">
-                              <button className='logBtn' onClick={onLogout}>{user.name} logout</button>
+                           <li><Link to='/'>Support</Link></li>
+                              <li><button className='logBtn' onClick={onLogout}>Logout</button></li>
+                              
                            </div>
                         </div>
                      </li>

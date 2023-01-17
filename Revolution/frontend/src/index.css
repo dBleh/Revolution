@@ -8,7 +8,7 @@
 
 /* Dropdown Button */
 .dropbtn {
-  background-color:#1f1e1e;
+  background-color: #1f1e1e;
   color: #999;
   padding: 16px;
   font-size: 16px;
@@ -25,9 +25,9 @@
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color:#ddd;
+  background-color: #ddd;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -40,10 +40,14 @@
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 
@@ -54,6 +58,7 @@
   top: 0;
   left: 0;
 }
+
 .close-icon {
   content: 'x';
   cursor: pointer;
@@ -69,6 +74,7 @@
   border: 1px solid #999;
   font-size: 20px;
 }
+
 .popbox {
   position: relative;
   width: 70%;
@@ -82,6 +88,7 @@
   border: 1px solid #999;
   overflow: auto;
 }
+
 iframe {
   margin-top: 0vh;
   margin-bottom: 2vh;
@@ -90,9 +97,10 @@ iframe {
   width: 70vh;
 
 }
+
 .react-calendar {
   background-color: #ffffff;
-  border-radius:.2em ;
+  border-radius: .2em;
   padding: 5px;
   width: 95%;
   height: 95%;
@@ -100,47 +108,57 @@ iframe {
   border: 0;
   margin-left: 2vw;
 }
+
 .react-calendar__tile {
   border: 0;
   background-color: #ffffff;
   padding: 20px;
   max-height: 20vh;
   min-height: 14vh;
- 
+
 }
+
 .react-calendar__tile:hover {
   background-color: #A386E0;
 }
+
 .react-calendar__tile:active {
   padding: 20px;
   background-color: #86a2e0;
 }
+
 .react-calendar__navigation__label {
   border: 0;
   background-color: #ffffff;
   padding: 20px;
 }
+
 .react-calendar__navigation__arrow {
   border: 0;
   background-color: #ffffff;
   padding: 20px;
 }
+
 .selected-tile {
-  background-color: #ac89f7; /* or any other color */
+  background-color: #ac89f7;
+  /* or any other color */
 }
+
 .event-info {
   margin-top: 5px;
   display: block;
   padding: 10px;
 }
-.eventData{
+
+.eventData {
   position: absolute;
   position: fixed;
   margin-bottom: 10vh;
-  
 
-  
+
+
 }
+
 .pBox {
   position: absolute;
   position: fixed;
@@ -450,22 +468,18 @@ h3 {
 }
 
 .logBtn {
-
-  padding: 10px 20px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  background: #000;
-  color: #9B9B9B;
-  font-size: 10;
-  font-weight: 70;
-  cursor: pointer;
-  text-align: center;
-  appearance: button;
   display: flex;
-  top: 20px;
-  right: 10px;
-  position: absolute;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 8000;
+  border: none;
+  background-color: #ddd;
+  appearance: button;
+  margin-left: 17px;
 
+}
+.logBtn:hover{
+  color:#A386E0
 }
 
 .btn svg {
