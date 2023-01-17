@@ -23,6 +23,7 @@ function RepCalendar() {
     const onClickDay = (date) => {
         setValue(date)
         setSelectedDate(date);
+        setEIsOpen(false)
         setIsOpen(!isOpen);
         if ((eventsOnClickedDay = events.filter((e) => e.day === date.toISOString()))) {
             setEventsOnClickedDay(eventsOnClickedDay)
@@ -100,11 +101,12 @@ function RepCalendar() {
 
                         </div>
                         
+                        
                     ))}
-                    <Button onClick={newEvent}>add event</Button>
-                    {!eIsOpen ? 
+                    
+                    {eIsOpen ? 
                     <CalendarForm onSubmit={onSubmit} />:
-                    null
+                    <Button onClick={newEvent}>add event</Button>
                     }
                     </div>}
                     

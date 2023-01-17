@@ -31,8 +31,9 @@ function ClientSearchBar() {
     if (searchUser.length === 0 && isFocused) {
         filteredClients = clients
     } else {
-        if(clients > 0){
+        if(clients.length > 0){
         filteredClients = clients?.filter((client) => client.name.toLowerCase().includes(searchUser.toLowerCase()))
+        console.log(filteredClients)
     }
 }
     const handleMouseDown = (client) => {
@@ -63,7 +64,7 @@ function ClientSearchBar() {
                     dataSource={filteredClients}
                     renderItem={(client) => (
                         <List.Item onMouseDown={() => handleMouseDown(client)}
-                             onMouseEnter={handleMouseEnter}
+                            onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                                     >
                             {client.name.length > 18 ? client.name.substring(0, 15) + '...' : client.name}
