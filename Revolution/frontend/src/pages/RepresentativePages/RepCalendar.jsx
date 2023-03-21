@@ -28,13 +28,14 @@ function RepCalendar() {
         if ((eventsOnClickedDay = events.filter((e) => e.day === date.toISOString()))) {
             setEventsOnClickedDay(eventsOnClickedDay)
         }
-
-     
-
     }
 
     const deleteEvent = (e) => {
-        dispatch(deleteCalendarEvent(e._id))
+        const form = {
+            userId: user._id,
+            eventId: e.eventId
+        }
+        dispatch(deleteCalendarEvent(form))
     }
 
     const onHandleChange = (date) => {
@@ -91,8 +92,6 @@ function RepCalendar() {
 
             {isOpen && <Popup
                 content={<div>
-
-                
                                     {Object.values(eventsOnClickedDay).map((event, index) => (
                         <div key={index}>
                             <p>{event.info}<Button onClick={() => deleteEvent(event)}>x</Button> </p>

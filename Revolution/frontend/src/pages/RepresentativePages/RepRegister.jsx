@@ -11,7 +11,7 @@ function RegisterRep() {
     email: '',
     password: '',
     password2: '',
-    userType: '',
+    role: '',
   })
   const { name, email, password, password2} = formData
   const navigate = useNavigate()
@@ -43,7 +43,7 @@ function RegisterRep() {
         name,
         email,
         password,
-        userType: "Broker",
+        role: "Broker",
       }
       dispatch(register(userData))
     }

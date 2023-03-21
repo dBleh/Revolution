@@ -12,7 +12,7 @@ function RegisterClient() {
     password: '',
     password2: '',
     primaryBroker: '',
-    userType: '',
+    role: '',
   })
   const { name, email, password, password2, } = formData
   const navigate = useNavigate()
@@ -44,7 +44,7 @@ function RegisterClient() {
         email,
         password,
         brokerId: user._id,
-        userType: "Client",
+        role: "Client",
       }
       dispatch(registerClient(userData))
       dispatch(changeClient(client))

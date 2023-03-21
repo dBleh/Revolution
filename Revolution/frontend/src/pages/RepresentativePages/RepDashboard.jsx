@@ -23,7 +23,7 @@ function RepDashboard() {
     if (isError) {
       console.log(message)
     }
-    if (user.userType !== "Broker") {
+    if (user.role !== "Broker") {
       navigate('/replogin')
     }
     const today = new Date();

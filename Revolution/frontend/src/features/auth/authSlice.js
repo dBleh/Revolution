@@ -21,6 +21,24 @@ const initialState = {
   isLoading: false,
   message: '',
 }
+
+export const pdfToExtract = createAsyncThunk(
+  'auth/pdfToExtract',
+  async (info, thunkAPI) => {
+    try {
+      return await authService.pdfToExtract(info)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+        return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 //Add Contact Form for selected client
 export const addContactInfo = createAsyncThunk(
   'auth/addContactInfo',
@@ -57,9 +75,9 @@ export const getClientContactInfo = createAsyncThunk(
 //Delete selected calendar event
 export const deleteCalendarEvent = createAsyncThunk(
   'auth/deleteCalendarEvent',
-  async (id, thunkAPI) => {
+  async (form, thunkAPI) => {
     try {
-      return await authService.deleteCalendarEvent(id)
+      return await authService.deleteCalendarEvent(form)
     } catch (error) {
       const message = (error.response && 
         error.response.data && 

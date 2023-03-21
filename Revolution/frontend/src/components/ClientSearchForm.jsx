@@ -32,13 +32,12 @@ function ClientSearchBar() {
         filteredClients = clients
     } else {
         if(clients.length > 0){
-        filteredClients = clients?.filter((client) => client.name.toLowerCase().includes(searchUser.toLowerCase()))
-        console.log(filteredClients)
+        filteredClients = clients?.filter((client) => client.email.toLowerCase().includes(searchUser.toLowerCase()))
     }
 }
     const handleMouseDown = (client) => {
         dispatch(changeClient(client))
-        setSearchUser(client.name)
+        setSearchUser(client.email)
         dispatch(reset())
     }
     const handleMouseEnter = (event) => {
@@ -53,7 +52,7 @@ function ClientSearchBar() {
             <Input
                 className="sBar"
                 type="search"
-                placeholder={client ? client.name : "Search here"}
+                placeholder={client ? client.email : "Search here"}
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
@@ -67,7 +66,7 @@ function ClientSearchBar() {
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                                     >
-                            {client.name.length > 18 ? client.name.substring(0, 15) + '...' : client.name}
+                            {client.email.length > 18 ? client.email.substring(0, 15) + '...' : client.email}
                         </List.Item>
                     )}
                     grid={{ gutter: 16, column: 1 }}

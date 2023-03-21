@@ -37,6 +37,7 @@ function RepLogin() {
     const userData = {
       email,
       password,
+      role: 'Broker'
     }
     dispatch(login(userData))
   }

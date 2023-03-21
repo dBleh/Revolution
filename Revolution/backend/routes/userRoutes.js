@@ -39,7 +39,7 @@ router.post('/getClients', getClients)
 router.post('/addCalendarEvent', addCalendarEvent)
 router.post('/getCalendarEvents', getCalendarEvents)
 router.post('/getClientContactInfo', getClientContactInfo)
-router.delete('/:id', deleteCalendarEvent)
+router.delete('/deleteCalendarEvent', deleteCalendarEvent)
 
 router.get('/me', protect, getMe)
 

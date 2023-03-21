@@ -3,9 +3,19 @@ import axios from 'axios'
 const API_URL = '/api/users/'
 
 //Representative Service Section
+const pdfToExtract = async (info) => {
+  console.log(info)
+
+  const response = await axios.post('http://localhost:8000/polls/', info, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
 //Delete Calendar Event
-const deleteCalendarEvent = async (eventId) => {
-  const response = await axios.delete(API_URL +eventId)
+const deleteCalendarEvent = async (form) => {
+  const response = await axios.delete(API_URL + 'deleteCalendarEvent',{data : form})
   return response.data
 }
 //Get Calendar Events
@@ -37,7 +47,6 @@ const register = async (userData) => {
 
 const addContactInfo = async (formData) => {
   const response = await axios.post(API_URL + 'addContactInfo', formData)
-   
   return response.data;
 };
 
@@ -106,6 +115,7 @@ const changeClient = async (client) => {
   const response = await axios.post(API_URL + 'changeClient',client)
   localStorage.removeItem('pdfs')
   localStorage.removeItem('client')
+  console.log(client)
   if (response.data) {
     localStorage.setItem('client', JSON.stringify(response.data))
   }
@@ -123,6 +133,7 @@ const logout = () => {
 
 // Login User In
 const login = async (userData) => {
+  console.log(userData)
   const response = await axios.post(API_URL + 'login', userData)
   if (response.data) {
     localStorage.setItem('user', JSON.stringify(response.data))
@@ -131,6 +142,7 @@ const login = async (userData) => {
 }
 
 const authService = {
+  pdfToExtract,
   addContactInfo,
   getClientContactInfo,
   deleteCalendarEvent,

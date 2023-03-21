@@ -1,123 +1,131 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
-const User = require('../models/userModel')
-const Client = require('../models/clientModel')
-const PDF = require('../models/pdfModel')
-const Policy = require('../models/policyModel')
-const CompanyInformation = require('../models/companyInformaionModel.js')
-const CalendarModel = require('../models/calendarModel.js')
-const ContactInfoModel = require('../models/contactInfoModel')
+const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose')
+var db = mongoose.createConnection(process.env.MONGO_URI)
+const ObjectId = require("mongodb").ObjectId;
+const cModel = require('../models/cModel')
+const rModel = require('../models/rModel')
 
 const addContactInfo = asyncHandler(async (req, res) => {
-
-  const { clientId, legalEntityName, email, phoneNumber } = req.body
-  
-  if (!legalEntityName || !email || !phoneNumber ) {
-    res.status(400)
-    throw new Error('Please add all fields')
-  }
-  const contactInfo = new ContactInfoModel({
-    clientId: clientId,
-    legalEntityName: legalEntityName,
-    email: email,
-    phoneNumber: phoneNumber,
-  })
-  contactInfo.save((error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Contact Information saved successfully');
-    }
-  });
-  
-})
-
-
-const getClientContactInfo = asyncHandler(async (req, res) => { 
-  
-  const events = await ContactInfoModel.find({ "clientID": req.body._id })
-   res.status(200).json(events)
+  const { clientId, legalEntityName, email, phoneNumber } = req.body;
+  await db.collection("clients").updateOne(
+    { _id: ObjectId(clientId) },
+    { $set: { 'data.legalEntityName': legalEntityName, 'data.phoneNumber': phoneNumber } }
+  );
 });
 
-const deleteCalendarEvent = asyncHandler(async(req,res) => {
-  const deleteEvent = await CalendarModel.findById(req.params.id)
-  if(!deleteEvent){
+const getClientContactInfo = asyncHandler(async (req, res) => {
+  const contactInfo = await db.collection("clients").findOne({ _id: ObjectId(req.body._id) })
+  const list = [contactInfo['data']['legalEntityName'],contactInfo['data']['phoneNumber']]
+  console.log(list)
+  res.status(200).json(list)
+});
+
+const deleteCalendarEvent = asyncHandler(async (req, res) => {
+  const { userId, eventId } = req.body;
+  if (!userId || !eventId) {
     res.status(400)
+    throw new Error('Please provide representative ID and event ID')
   }
-  await deleteEvent.remove()
-})
-const getCalendarEvents = asyncHandler(async (req, res) => { 
-  const events = await CalendarModel.find({ "repId": req.body._id })
-   res.status(200).json(events)
+  await db.collection("representatives").updateOne(
+    { _id: ObjectId(userId) },
+    { $unset: { [`events.${eventId}`]: "" } }
+  );
+
+  res.json({ message: "Event deleted successfully" });
+});
+
+const getCalendarEvents = asyncHandler(async (req, res) => {
+
+  const events = await db.collection("representatives").findOne(
+    { _id: ObjectId(req.body._id) },
+
+  );
+  var list = []
+  var counter = 0
+  const keys = Object.keys(events.events);
+  for (const key in events.events) {
+    var tempDict = events.events[key]
+    tempDict['eventId'] = keys[counter]
+    list[counter] = tempDict
+    counter += 1
+  }
+  res.status(200).json(list)
 });
 
 const addCalendarEvent = asyncHandler(async (req, res) => {
-  
-  const { repId,day,info, startTime, endTime } = req.body
-  
+  const { repId, day, info, startTime, endTime } = req.body
+  const event = {
+    info: info,
+    day: day,
+    startTime: startTime,
+    endTime: endTime
+  }
+  const eventId = uuidv4();
   if (!repId || !info) {
     res.status(400)
     throw new Error('Please add all fields')
   }
-  
-  const cEvent = new CalendarModel({
-    repId: repId,
-    info: info,
-    day: day,
-    startTime: startTime ? startTime : 0,
-    endTime: endTime ? endTime: 0,
-  })
-  cEvent.save((error) => {
-    if (error) {
-      console.log('hi');
-    } else {
-      console.log('Event saved successfully');
-    }
-  });
-  
+  await db.collection("representatives").updateOne(
+    { _id: ObjectId(repId) },
+    { $set: { [`events.${eventId}`]: event } }
+  );
 })
 
 const addCompanyInformation = asyncHandler(async (req, res) => {
-
-  const { repId, clientId, business_Type, company_name, sic_code, annual_revenue,  } = req.body
-  if (!business_Type || !company_name || !sic_code || !annual_revenue ) {
+  const { clientId, business_Type, company_name, sic_code, annual_revenue, } = req.body
+  if (!business_Type || !company_name || !sic_code || !annual_revenue) {
     res.status(400)
     throw new Error('Please add all fields')
   }
-  const companyInformation  = new CompanyInformation({
-    repId: repId,
-    clientId: clientId,
-    business_Type: business_Type,
-    company_name: company_name,
-    sic_code: sic_code,
-    annual_revenue: annual_revenue,
-  })
-  companyInformation.save((error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Company Information saved successfully');
+  await db.collection("clients").updateOne(
+    { _id: ObjectId(clientId) },
+    {
+      $set: {
+        'data.businessType': business_Type,
+        'data.companyName': company_name,
+        'data.sicCode': sic_code,
+        'data.annualRevenue': annual_revenue,
+      }
     }
-  });
-  
+  );
 })
 
-const getPolicies = asyncHandler(async (req, res) => { 
-  const policies = await Policy.find({ "repId": req.body._id })
-   res.status(200).json(policies)
+const getPolicies = asyncHandler(async (req, res) => {
+  const policies = await db.collection('clients').findOne(
+    {_id: ObjectId(req.body.clientId)},)
+    
+    var list = []
+    var counter = 0
+    if(policies['policyId']){
+      console.log(policies['policyId'])
+      const keys = Object.keys(policies.policies);
+      for (const key in policies.policies) {
+        var tempDict = policies.policies[key]
+        tempDict['policyId'] = keys[counter]
+        list[counter] = tempDict
+        counter += 1
+      }
+      res.status(200).json(list)
+    }
+   else{
+    res.status(200).json(list)
+   }
+    
+    res.status(200).json(list)
 });
 
 const addPolicy = asyncHandler(async (req, res) => {
 
-  const { repId, clientId, primaryActivity, quoteDate, validUntil, policyPeriod, revenue, employees, capacity, policyCost } = req.body
+  const { clientId, primaryActivity, quoteDate, validUntil, policyPeriod, revenue, employees, capacity, policyCost } = req.body
   if (!primaryActivity || !quoteDate || !validUntil || !policyPeriod || !revenue || !employees || !capacity || !policyCost) {
     res.status(400)
     throw new Error('Please add all fields')
   }
-  const policy = new Policy({
-    repId: repId,
-    clientId: clientId,
+  const policyId = uuidv4();
+  const policy = {
     primaryActivity: primaryActivity,
     quoteDate: quoteDate,
     validUntil: validUntil,
@@ -126,54 +134,64 @@ const addPolicy = asyncHandler(async (req, res) => {
     employees: employees,
     capacity: capacity,
     policyCost: policyCost,
-  })
-  policy.save((error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Policy saved successfully');
+  }
+  await db.collection("clients").updateOne(
+    { _id: ObjectId(clientId) },
+    {
+      $set: {
+        [`policies.${policyId}`] : policy
+      }
     }
-  });
-  
+  );
 })
 
 
 const addPdf = asyncHandler(async (req, res) => {
   const { buffer } = req.file
-
-  const pdf = new PDF({
-    repId: req.body.repId,
-    clientId: req.body.clientId,
+  const pdfId = uuidv4();
+  const pdf = {
     fileName: req.body.filename,
     data: buffer,
-    clientName: req.body.name
-  })
+  }
 
-  pdf.save((error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('PDF saved successfully');
+  await db.collection("clients").updateOne(
+    { _id: ObjectId(req.body.clientId) },
+    {
+      $set: { [`pdfs.${pdfId}`]: pdf }
     }
-  });
-});
+  )
+}
+)
 
 const getPdfs = asyncHandler(async (req, res) => {
-  const pdfs = await PDF.find({ "repId": req.body[0], "clientId": req.body[1]})
-  res.status(200).json(pdfs)
+  const pdfs = await db.collection("representatives").findOne(
+    { _id: ObjectId(req.body._id) },
+
+  );
+  var list = []
+  var counter = 0
+  const keys = Object.keys(pdfs.pdfs);
+  for (const key in pdfs.pdfs) {
+    var tempDict = pdfs.pdfs[key]
+    tempDict['pdfId'] = keys[counter]
+    list[counter] = tempDict
+    counter += 1
+  }
+  res.status(200).json(list)
 });
 
 // @desc    Register new user
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, userType } = req.body
-  if (!name || !email || !password || !userType) {
+  const { name, email, password, role } = req.body
+  e = email.toLowerCase()
+  if (!name || !email || !password || !role) {
     res.status(400)
     throw new Error('Please add all fields')
   }
   // Check if user exists
-  const userExists = await User.findOne({ email })
+  const userExists = await rModel.findOne({ email })
   if (userExists) {
     res.status(400)
     throw new Error('User already exists')
@@ -182,18 +200,18 @@ const registerUser = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10)
   const hashedPassword = await bcrypt.hash(password, salt)
   // Create user
-  const user = await User.create({
+  const user = await rModel.create({
     name,
-    email,
+    email: e,
     password: hashedPassword,
-    userType,
+    role: role,
   })
   if (user) {
     res.status(201).json({
       _id: user.id,
       name: user.name,
       email: user.email,
-      userType: user.userType,
+      role: user.role,
       token: generateToken(user._id),
     })
   } else {
@@ -203,13 +221,14 @@ const registerUser = asyncHandler(async (req, res) => {
 })
 
 const registerClient = asyncHandler(async (req, res) => {
-  const { name, email, password, userType, brokerId } = req.body
-  if (!name || !email || !password || !userType || !brokerId) {
+  const { email, password, brokerId, role } = req.body
+  e = email.toLowerCase()
+  if (!email || !password || !brokerId) {
     res.status(400)
     throw new Error('Please add all fields')
   }
   // Check if user exists
-  const userExists = await Client.findOne({ email })
+  const userExists = await cModel.findOne({ email })
   if (userExists) {
     res.status(400)
     throw new Error('User already exists')
@@ -217,21 +236,20 @@ const registerClient = asyncHandler(async (req, res) => {
   // Hash password
   const salt = await bcrypt.genSalt(10)
   const hashedPassword = await bcrypt.hash(password, salt)
+
   {
-    const user = await Client.create({
-      name,
-      email,
+    const user = await cModel.create({
+      email: e,
       password: hashedPassword,
-      userType,
-      brokerId,
+      rId: brokerId,
+      role: role,
     })
     if (user) {
       res.status(201).json({
         _id: user.id,
-        name: user.name,
         email: user.email,
-        userType: user.userType,
-        brokerId: user._id,
+        rId: brokerId,
+        role: user.role,
       })
     } else {
       res.status(400)
@@ -244,16 +262,17 @@ const registerClient = asyncHandler(async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password, userType } = req.body
-  if (userType === "Client") {
-    const user = await Client.findOne({ email })
+  const { email, password, role } = req.body
+  e = email.toLowerCase()
+
+  if (role === "Client") {
+    const user = await cModel.findOne({ e })
 
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
         _id: user.id,
-        name: user.name,
         email: user.email,
-        userType: user.userType,
+        role: user.role,
         token: generateToken(user._id),
       })
     } else {
@@ -263,14 +282,12 @@ const loginUser = asyncHandler(async (req, res) => {
   }
   else {
     // Check for user email
-    const user = await User.findOne({ email })
-
+    const user = await rModel.findOne({ e })
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
         _id: user.id,
-        name: user.name,
         email: user.email,
-        userType: user.userType,
+        role: user.role,
         token: generateToken(user._id),
       })
     } else {
@@ -278,12 +295,13 @@ const loginUser = asyncHandler(async (req, res) => {
       throw new Error('Invalid credentials')
     }
   }
+
 })
 
 // get all clients
 const getClients = asyncHandler(async (req, res) => {
 
-  const rep = await Client.find({"brokerId": req.body._id}, { name: 1, email: 1, userType: 1, primaryBroker: 1, _id: 1 })
+  const rep = await cModel.find({ "rId": req.body._id }, { email: 1, role: 1, _id: 1 })
   res.status(200).json(rep)
 
 })

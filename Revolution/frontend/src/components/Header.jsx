@@ -11,6 +11,7 @@ function Header() {
    const { user } = useSelector((state) => state.auth)
 
 
+
    const onLogout = () => {
       dispatch(logout())
       dispatch(reset())
@@ -28,7 +29,7 @@ function Header() {
                      <li><Link to='/repregister'>Broker Registeration</Link></li>
                   </ul>
                </>//if the user type is of type client, present these pages.
-            ) : user.userType === "Client" ? (
+            ) : user.role === "Client" ? (
                <>
                   <div className='logo'>
                      <Link to='/clientdashboard'>{user.name}</Link></div>
@@ -45,7 +46,7 @@ function Header() {
                      </li><button className='logBtn' onClick={onLogout}>{user.name} logout</button>
                   </ul>
                </>
-            ) : user.userType === "Broker" ? (
+            ) : user.role === "Broker" ? (
                <>
                   <div className='logo'><Link to='/repdashboard'>R</Link></div>
                   <ul>

@@ -34,6 +34,7 @@ function RepSubmissions() {
       e.clientId = client._id
       dispatch(addContactInfo(e))
     }
+   
   };
   const handleFormTypeChange = (value) => {
     setFormType(value);
@@ -46,11 +47,13 @@ function RepSubmissions() {
           <Option value="pdfForm">PDF Form</Option>
           <Option value="companyInformationForm"> Company Information Form </Option>
           <Option value="contactForm"> Contact Form </Option>
+          <Option value="test"> Test</Option>
         </Select>
         {formType === 'policyForm' ? <PolicyForm onSubmit={onSubmit}  /> : null}
         {formType === 'pdfForm' ? <PdfForm onSubmit={onSubmit} /> : null}
         {formType === 'companyInformationForm' ? <CompanyInformationForm onSubmit={onSubmit} /> : null}
-        {formType === 'contactForm' ? <ContactForm onSubmit={onSubmit} /> : null}      
+        {formType === 'contactForm' ? <ContactForm onSubmit={onSubmit} /> : null}  
+        
       </>
       : 'No Client selected '}
       {/* Toggle switch to switch between form and PDF submission form */}
